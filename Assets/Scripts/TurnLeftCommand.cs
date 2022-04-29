@@ -1,15 +1,11 @@
-﻿public class TurnLeftCommand : Command
+﻿public class TurnLeftCommand : MoveCommand
 {
-    IChangeOrientation _orientationChanger;
-
-    public TurnLeftCommand(IChangeOrientation orientationChanger)
+    public TurnLeftCommand(IMove mover)
     {
-        _orientationChanger = orientationChanger;
+        Mover = mover;
     }
-
     public override void ExecuteCommand()
     {
-        _orientationChanger.TurnLeft();
+        Mover.TurnLeft();
     }
-
 }

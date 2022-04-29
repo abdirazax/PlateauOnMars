@@ -1,14 +1,14 @@
-﻿public class MoveCommand : Command
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public abstract class MoveCommand
 {
-    IMove _forwardMover;
-
-    public MoveCommand(IMove forwardMover)
+    IMove _mover;
+    public IMove Mover
     {
-        _forwardMover = forwardMover;
+        get { return _mover; }
+        protected set { _mover = value; }
     }
 
-    public override void ExecuteCommand()
-    {
-        _forwardMover.Move();
-    }
+    public abstract void ExecuteCommand();
 }

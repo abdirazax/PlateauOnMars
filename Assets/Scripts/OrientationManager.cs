@@ -3,8 +3,21 @@ using System.Collections.Generic;
 
 public abstract class OrientationManager
 {
-    public List<IGiveMoveInstruction> possibleOrientations;
+    protected List<Orientation> possibleOrientations;
     int _currentOrientationIndex = 0;
+
+    public Orientation CurrentOrientation => possibleOrientations[CurrentOrientationIndex];
+    public string CurrentOrientationString
+    { get { return possibleOrientations[CurrentOrientationIndex].OrientationName; }
+        set {
+            for (int i = 0; i < possibleOrientations.Count; i++) 
+            {
+                if (possibleOrientations[i].OrientationName == value)
+                    CurrentOrientationIndex = i;
+            }
+        }
+    }
+
     public int CurrentOrientationIndex
     {
         get { return _currentOrientationIndex; }
@@ -20,10 +33,6 @@ public abstract class OrientationManager
         }
     }
 
-    public IGiveMoveInstruction GetCurrentOrientation()
-    {
-        return possibleOrientations[CurrentOrientationIndex];
-    }
     private bool IsThereAtLeastTwoOrientations()
     {
         return (possibleOrientations.Count >= 2);
