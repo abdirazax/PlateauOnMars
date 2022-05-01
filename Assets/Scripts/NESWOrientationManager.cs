@@ -3,13 +3,23 @@ using UnityEngine;
 
 public class NESWOrientationManager : OrientationManager
 {
-    public NESWOrientationManager(int currentOrientationIndex)
+
+    public NESWOrientationManager(List<Orientation> orientations,
+                                  int currentOrientation) 
+        : base(
+            orientations,
+            currentOrientation)
     {
-        possibleOrientations = new List<Orientation>();
-        possibleOrientations.Add(new Orientation(Vector2Int.up, "N"));
-        possibleOrientations.Add(new Orientation(Vector2Int.right, "E"));
-        possibleOrientations.Add(new Orientation(Vector2Int.down, "S"));
-        possibleOrientations.Add(new Orientation(Vector2Int.left, "W"));
-        CurrentOrientationIndex = currentOrientationIndex;
+    }
+    public NESWOrientationManager(int currentOrientation)
+        : base(
+            orientations: new List<Orientation>(){
+                new Orientation(Vector2Int.up, "N"),
+                new Orientation(Vector2Int.right, "E"),
+                new Orientation(Vector2Int.down, "S"),
+                new Orientation(Vector2Int.left, "W")
+            },
+            currentOrientation)
+    {
     }
 }

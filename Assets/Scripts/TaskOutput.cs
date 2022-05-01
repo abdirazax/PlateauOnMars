@@ -2,35 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class TaskOutput : MonoBehaviour
 {
 
-    List<Rover> _rovers;
-    [SerializeField]
-    TaskInput input;
     [SerializeField]
     TextMeshPro outputTMPro;
-    public void ExecuteAndDisplay()
+    [SerializeField]
+    TextMeshPro outputTMProSmallScreen;
+
+    public void DisplayText(string text)
+    {
+        outputTMPro.text = text;
+    }
+
+    public void DisplayMovers( List<Mover> movers )
     {
         string outputText = "";
-        _rovers = input.GetRoversAfterCommandsExecuted();
-        foreach(Rover r in _rovers)
+        foreach (Mover mover in movers)
         {
-            outputText += r.Pos.x
+            outputText += mover.Pos.x
                                 + " "
-                                + r.Pos.y
+                                + mover.Pos.y
                                 + " "
-                                + r.OrientationManager.CurrentOrientationString
+                                + mover.OrientationManager.CurrentOrientationString
                                 + "\n";
-            
         }
         outputTMPro.text = outputText;
     }
 
+
+
     //debugging
     private void Start()
     {
-        ExecuteAndDisplay();
+        
+    }
+
+    internal void DisplayTextOnSmallScreen(string text)
+    {
+        outputTMProSmallScreen.text = text;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Orientation
+public struct Orientation
 {
     Vector2Int _destination; // where will object go locally if it is oriented that way
     string _orientationName;

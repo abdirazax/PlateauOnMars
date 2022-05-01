@@ -1,11 +1,10 @@
 ﻿public class TurnRightCommand : MoveCommand
 {
-    public TurnRightCommand(IMove mover)
+    public TurnRightCommand()
     {
-        Mover = mover;
     }
-    public override void ExecuteCommand()
+    public override void ExecuteCommand(Mover mover)
     {
-        Mover.TurnRight();
+        mover.TurnRight();
     }
 }

@@ -1,11 +1,10 @@
 ﻿public class MoveForwardCommand : MoveCommand
 {
-    public MoveForwardCommand(IMove mover)
+    public MoveForwardCommand()
     {
-        Mover = mover;
     }
-    public override void ExecuteCommand()
+    public override void ExecuteCommand(Mover mover)
     {
-        Mover.Move();
+        mover.Move();
     }
 }

@@ -5,63 +5,109 @@ using UnityEngine;
 public class TaskInput : MonoBehaviour
 {
     [SerializeField]
-    protected int _plateauSizeX = 1;
-    [SerializeField]
-    protected int _plateauSizeY = 1;
-    [SerializeField]
-    public List<MoveCommand> commands = new List<MoveCommand>();
-    
-
-
-    public List<Rover> GetRoversAfterCommandsExecuted()
+    protected int PlateauSizeX
     {
-        List<Rover> rovers = new List<Rover>();
-        foreach (MoveCommand command in commands)
-        {
-            command.ExecuteCommand();
-            if (!rovers.Contains((Rover)command.Mover))
-                rovers.Add((Rover)command.Mover);
+        get { return _movementRestrictor.X; }
+        set { _movementRestrictor.X = value;
+            DisplayInput();
+            DisplaySize();
         }
-        return rovers;
+    }
+    [SerializeField]
+    protected int PlateauSizeY
+    {
+        get { return _movementRestrictor.Y; }
+        set { _movementRestrictor.Y = value;
+            DisplayInput();
+            DisplaySize();
+        }
+    }
+    protected RectangleMapRestrictor _movementRestrictor;
+    [SerializeField]
+    protected List<MoveCommandsManager> _moveCommandManagers;
+    [SerializeField]
+    protected TaskOutput output;
+
+
+    private void Awake()
+    {
+        _movementRestrictor = new RectangleMapRestrictor(1, 1);
+        _moveCommandManagers = new List<MoveCommandsManager>();
+        DisplayInput();
+
     }
 
-    //debugging
-    /*private void Awake()
+    public void DisplayInput()
     {
-        List<Rover> initRovers = new List<Rover>();
-        initRovers.Add(new Rover(
-            0,
-            1,
-            new NESWOrientationManager(0),
-            new RectangleMapRestrictor(_plateauSizeX, _plateauSizeY)));
-        initRovers.Add(new Rover(
-                    2,
-                    1,
-                    new NESWOrientationManager(0),
-                    new RectangleMapRestrictor(_plateauSizeX, _plateauSizeY)));
+        string inputText = (PlateauSizeX ) + " " + (PlateauSizeY ) + "\n";
+        foreach(MoveCommandsManager moveCommandsManager in _moveCommandManagers)
+        {
+            inputText += moveCommandsManager.Mover.Pos.x + " " +
+                        moveCommandsManager.Mover.Pos.y + " " +
+                        moveCommandsManager.Mover.OrientationManager.CurrentOrientationString + "\n";
+            foreach(MoveCommand moveCommand in moveCommandsManager.Commands)
+            {
+                if (moveCommand is MoveForwardCommand)
+                    inputText += "M";
+                else if (moveCommand is TurnLeftCommand)
+                    inputText += "L";
+                else if (moveCommand is TurnRightCommand)
+                    inputText += "R";
+            }
+            inputText += "\n";
+        }
+        output.DisplayText(inputText);
+    }
 
+    public void DisplayOutput()
+    {
+        output.DisplayMovers(GetTheoreticalMoversAfterCommandsExecuted());
+    }
 
-        commands.Add(new MoveForwardCommand(initRovers[0]));
-        commands.Add(new MoveForwardCommand(initRovers[1]));
-        commands.Add(new MoveForwardCommand(initRovers[0]));
-        commands.Add(new TurnLeftCommand(initRovers[0]));
-    }*/
-}
+    public List<Mover> GetTheoreticalMoversAfterCommandsExecuted()
+    {
+        List<MoveCommandsManager> theoreticalMoveCmdManagers =
+            _moveCommandManagers.ConvertAll(moveCmdManager => moveCmdManager.DeepCopy);
+        List<Mover> theoreticalMovers = new List<Mover>();
+        foreach (MoveCommandsManager theoreticalMoveCmdManager in theoreticalMoveCmdManagers)
+        {
+            theoreticalMoveCmdManager.ExecuteAllCommands();
+            theoreticalMovers.Add(theoreticalMoveCmdManager.Mover);
+        }
+        return theoreticalMovers;
+    }
 
-public class TaskInputVRKeys : TaskInput
-{
-    List<Rover> rovers = new List<Rover>();
+    public void AddMLRCommandToLastMover(string commandName)
+    {
+        if (_moveCommandManagers.Count > 0)
+        {
+            switch (commandName)
+            {
+                case "M":
+                    _moveCommandManagers[_moveCommandManagers.Count - 1].AddCommand(new MoveForwardCommand());
+                    break;
+                case "L":
+                    _moveCommandManagers[_moveCommandManagers.Count - 1].AddCommand(new TurnLeftCommand());
+                    break;
+                case "R":
+                    _moveCommandManagers[_moveCommandManagers.Count - 1].AddCommand(new TurnRightCommand());
+                    break;
+            }
+        }
+
+        DisplayInput();
+    }
+
     public void SetMapSize(int x, int y)
     {
-        _plateauSizeX = x;
-        _plateauSizeY = y;
+        PlateauSizeX = x;
+        PlateauSizeY = y;
     }
 
-    public void SetLastRoverOrientation(string newOrientation)
+
+    public void DisplaySize()
     {
-        if (rovers.Count > 0)
-        {
-            rovers[rovers.Count - 1].OrientationManager.CurrentOrientationString = newOrientation;
-        }
+        output.DisplayTextOnSmallScreen((PlateauSizeX) + " " + (PlateauSizeY));
     }
+
 }

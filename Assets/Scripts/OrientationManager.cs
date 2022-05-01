@@ -1,23 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public abstract class OrientationManager
+public class OrientationManager
 {
-    protected List<Orientation> possibleOrientations;
+    protected List<Orientation> _possibleOrientations;
     int _currentOrientationIndex = 0;
-
-    public Orientation CurrentOrientation => possibleOrientations[CurrentOrientationIndex];
-    public string CurrentOrientationString
-    { get { return possibleOrientations[CurrentOrientationIndex].OrientationName; }
-        set {
-            for (int i = 0; i < possibleOrientations.Count; i++) 
-            {
-                if (possibleOrientations[i].OrientationName == value)
-                    CurrentOrientationIndex = i;
-            }
-        }
-    }
-
     public int CurrentOrientationIndex
     {
         get { return _currentOrientationIndex; }
@@ -26,15 +14,40 @@ public abstract class OrientationManager
             if (IsThereAtLeastTwoOrientations())
             {
                 // loop from another side of bounds if the new chosen orientation index exceeds bounds
-                _currentOrientationIndex = 
+                _currentOrientationIndex =
                     Utilities.GetIndexLoopedFromOtherSideWhenOutOfBounds
-                    (value, 0, possibleOrientations.Count - 1);
+                    (value, 0, _possibleOrientations.Count - 1);
             }
         }
     }
-
-    private bool IsThereAtLeastTwoOrientations()
+    public Orientation CurrentOrientation => _possibleOrientations[CurrentOrientationIndex];
+    public string CurrentOrientationString
+    { get { return _possibleOrientations[CurrentOrientationIndex].OrientationName; }
+        set {
+            for (int i = 0; i < _possibleOrientations.Count; i++) 
+            {
+                if (_possibleOrientations[i].OrientationName == value)
+                    CurrentOrientationIndex = i;
+            }
+        }
+    }
+    public OrientationManager DeepCopy
     {
-        return (possibleOrientations.Count >= 2);
+        get
+        {
+            return new OrientationManager(_possibleOrientations,
+                                          _currentOrientationIndex);
+        }
+    }
+
+    public OrientationManager(List<Orientation> orientations, int currentOrientation)
+    {
+        _possibleOrientations = orientations;
+        CurrentOrientationIndex = currentOrientation;
+    }
+
+    bool IsThereAtLeastTwoOrientations()
+    {
+        return (_possibleOrientations.Count >= 2);
     }
 }
