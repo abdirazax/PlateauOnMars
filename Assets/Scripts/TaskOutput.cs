@@ -32,14 +32,6 @@ public class TaskOutput : MonoBehaviour
         outputTMPro.text = outputText;
     }
 
-
-
-    //debugging
-    private void Start()
-    {
-        
-    }
-
     internal void DisplayTextOnSmallScreen(string text)
     {
         outputTMProSmallScreen.text = text;

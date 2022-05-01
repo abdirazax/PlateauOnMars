@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class TaskInputVRKeys : TaskInput
 {
-
+    // This and TaskInput classes can be refactored further
+    // Because it is responsible for way too many things for now
+    // There was no time that I could afford to spend on this :(
+   
     public void AddNewStandardMover()
     {
         _moveCommandManagers.Add(

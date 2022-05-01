@@ -34,7 +34,6 @@ public class TaskInput : MonoBehaviour
         _movementRestrictor = new RectangleMapRestrictor(1, 1);
         _moveCommandManagers = new List<MoveCommandsManager>();
         DisplayInput();
-
     }
 
     public void DisplayInput()
@@ -58,11 +57,15 @@ public class TaskInput : MonoBehaviour
         }
         output.DisplayText(inputText);
     }
-
     public void DisplayOutput()
     {
         output.DisplayMovers(GetTheoreticalMoversAfterCommandsExecuted());
     }
+    public void DisplaySize()
+    {
+        output.DisplayTextOnSmallScreen((PlateauSizeX) + " " + (PlateauSizeY));
+    }
+
 
     public List<Mover> GetTheoreticalMoversAfterCommandsExecuted()
     {
@@ -76,7 +79,6 @@ public class TaskInput : MonoBehaviour
         }
         return theoreticalMovers;
     }
-
     public void AddMLRCommandToLastMover(string commandName)
     {
         if (_moveCommandManagers.Count > 0)
@@ -97,17 +99,11 @@ public class TaskInput : MonoBehaviour
 
         DisplayInput();
     }
-
     public void SetMapSize(int x, int y)
     {
         PlateauSizeX = x;
         PlateauSizeY = y;
     }
 
-
-    public void DisplaySize()
-    {
-        output.DisplayTextOnSmallScreen((PlateauSizeX) + " " + (PlateauSizeY));
-    }
 
 }
