@@ -1,4 +1,7 @@
 # PlateauOnMars
+
+### Note: This is an older personal project reflecting early VR experience and coding skills. This project was done in May 2022
+
 This project is a VR solution for a Mars Rovers Challenge
 I tried to implement Command Pattern and Inversion of Control pattern. I am not so sure about the Inversion of Control pattern, but Command Pattern in my opinion has been successfully implemented.
 There is also Humble Objects Pattern that I have used for this project.
